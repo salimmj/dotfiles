@@ -1,0 +1,27 @@
+{
+  "name": "Dotfiles Test Environment",
+  "image": "ubuntu:jammy",
+  "initializeCommand": "ls",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": false,
+      "username": "vscode",
+      "uid": "1000",
+      "gid": "1000",
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "eamodio.gitlens",
+        "editorconfig.editorconfig"
+      ]
+    },
+    "settings": {
+      "dotfiles.repository": "salimmj/dotfiles"
+    }
+  },
+  "remoteUser": "vscode",
+}

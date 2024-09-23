@@ -1,0 +1,10 @@
+# This is the actual gitignore of this repo
+*.log
+*.out
+*.err
+*.tmp
+*.pid
+*.lock
+*.lock.old
+*.lock.new
+*.lock.tmp

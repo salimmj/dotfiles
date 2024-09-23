@@ -1,0 +1,34 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# 4 space indentation
+[*.{py,java,r,R}]
+indent_style = space
+indent_size = 4
+
+# 2 space indentation
+[*.{js,json,y{a,}ml,html,ruby,css,scss,xml,vue}]
+indent_style = space
+indent_size = 2
+
+# Tab indentation (no size specified)
+[Makefile]
+indent_style = tab
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+
+# Match shell script files
+[*.sh]
+indent_style = space
+indent_size = 2

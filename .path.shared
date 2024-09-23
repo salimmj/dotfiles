@@ -1,0 +1,53 @@
+# .path.shared
+
+# Function to safely add a directory to PATH
+add_to_path() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="$1:$PATH"
+    fi
+}
+
+# Homebrew paths (macOS and Linux)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS Intel
+    add_to_path "/usr/local/bin"
+    # macOS Apple Silicon
+    add_to_path "/opt/homebrew/bin"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux
+    add_to_path "/home/linuxbrew/.linuxbrew/bin"
+fi
+
+# Add local bin directory
+add_to_path "$HOME/.local/bin"
+
+# Rust binaries
+add_to_path "$HOME/.cargo/bin"
+
+# Go binaries
+add_to_path "$HOME/go/bin"
+
+# Node.js binaries (if using nvm)
+if [ -d "$HOME/.nvm/versions/node" ]; then
+    NODE_LATEST=$(ls -t "$HOME/.nvm/versions/node/" | head -n1)
+    add_to_path "$HOME/.nvm/versions/node/$NODE_LATEST/bin"
+fi
+
+# Python user base binaries
+if command -v python3 >/dev/null 2>&1; then
+    PYTHON_USER_BASE=$(python3 -m site --user-base)
+    add_to_path "$PYTHON_USER_BASE/bin"
+fi
+
+# Ruby gems (if using rbenv)
+if command -v rbenv >/dev/null 2>&1; then
+    eval "$(rbenv init -)"
+elif [ -d "$HOME/.rbenv/bin" ]; then
+    add_to_path "$HOME/.rbenv/bin"
+    eval "$(rbenv init -)"
+fi
+
+# Yarn global binaries
+add_to_path "$HOME/.yarn/bin"
+
+export PATH
