@@ -27,3 +27,15 @@ eval "$(starship init bash)"
 
 # Add Cargo to PATH if it exists
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# Source shared configurations
+for file in ~/.{aliases,functions,exports.shared,path.shared}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file"
+done
+
+# Source local configurations
+for file in ~/.{path.local,exports.local,extra}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file"
+done
+
+unset file

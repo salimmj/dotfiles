@@ -115,5 +115,67 @@ ipreal() {
         echo "Unsupported operating system"
         return 1
     fi
-    ip route get 1.0.0.1 | awk '{print $NF; exit}'
+    ip route get $1 | awk '{print $NF; exit}'
+}
+
+killport() {
+    local port=$1
+    local dry_run=false
+
+    # Check if dry run option is provided
+    if [[ "$2" == "--dry-run" || "$2" == "-d" ]]; then
+        dry_run=true
+    fi
+
+    # Validate port number
+    if ! [[ "$port" =~ ^[0-9]+$ ]] || [ "$port" -lt 1 ] || [ "$port" -gt 65535 ]; then
+        echo "Error: Invalid port number. Please provide a number between 1 and 65535."
+        return 1
+    fi
+
+    # Find the process ID using the port
+    local pid=$(lsof -ti tcp:$port)
+
+    if [ -z "$pid" ]; then
+        echo "No process found running on port $port"
+        return 0
+    fi
+
+    # Get process details
+    local process_info=$(ps -p $pid -o comm=)
+
+    if $dry_run; then
+        echo "Dry run: Would kill process '$process_info' (PID: $pid) running on port $port"
+    else
+        echo "Killing process '$process_info' (PID: $pid) running on port $port"
+        kill -9 $pid
+        echo "Process killed successfully"
+    fi
+}
+
+whichport() {
+    local port=$1
+
+    # Validate port number
+    if ! [[ "$port" =~ ^[0-9]+$ ]] || [ "$port" -lt 1 ] || [ "$port" -gt 65535 ]; then
+        echo "Error: Invalid port number. Please provide a number between 1 and 65535."
+        return 1
+    fi
+
+    # Find process information using the port
+    local process_info=$(lsof -i :$port)
+
+    if [ -z "$process_info" ]; then
+        echo "No process found running on port $port"
+    else
+        echo "Process information for port $port:"
+        echo "$process_info"
+
+        # Extract PID and get additional details
+        local pid=$(echo "$process_info" | awk 'NR==2 {print $2}')
+        if [ -n "$pid" ]; then
+            echo -e "\nAdditional process details:"
+            ps -p $pid -o pid,ppid,user,%cpu,%mem,start,command
+        fi
+    fi
 }
