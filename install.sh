@@ -199,12 +199,29 @@ install_redhat_packages() {
 # Function to install packages on macOS
 install_macos_packages() {
   log "Installing packages on macOS..."
+
+  # Check for and install Xcode Command Line Tools
+  if ! xcode-select --print-path &> /dev/null; then
+    log "Installing Xcode Command Line Tools..."
+    xcode-select --install
+    # Wait until the installation is complete
+    until xcode-select --print-path &> /dev/null; do
+      sleep 5
+    done
+    log "Xcode Command Line Tools installed."
+  fi
+
+  # Install Homebrew if not already installed
   if ! command_exists brew; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)" # Make sure Homebrew is sourced after installation
   fi
+
+  # Update Homebrew and install essential packages
   brew update
   brew install git neovim tmux curl wget
 }
+
 
 # Function to setup neovim
 setup_neovim() {
