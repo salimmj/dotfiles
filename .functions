@@ -179,3 +179,109 @@ whichport() {
         fi
     fi
 }
+
+
+whichprocess() {
+    local process_name=$1
+    shift
+    local case_sensitive=false
+    local show_threads=false
+    local sort_by="cpu"
+    local kill_processes=false
+
+    # Parse optional arguments
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            -c|--case-sensitive)
+                case_sensitive=true
+                shift
+                ;;
+            -t|--show-threads)
+                show_threads=true
+                shift
+                ;;
+            -s|--sort)
+                if [[ -n $2 ]]; then
+                    sort_by="$2"
+                    shift 2
+                else
+                    echo "Error: --sort requires an argument."
+                    return 1
+                fi
+                ;;
+            -k|--kill)
+                kill_processes=true
+                shift
+                ;;
+            *)
+                echo "Unknown parameter: $1"
+                return 1
+                ;;
+        esac
+    done
+
+    # Prepare grep options
+    local grep_opts="-i"
+    [[ "$case_sensitive" == true ]] && grep_opts=""
+
+    # Prepare ps options
+    local ps_opts="aux"
+    [[ "$show_threads" == true ]] && ps_opts="axH"
+
+    # Prepare sort options
+    local sort_column
+    case "$sort_by" in
+        cpu) sort_column=3 ;;
+        mem) sort_column=4 ;;
+        pid) sort_column=2 ;;
+        *)
+            echo "Invalid sort option. Using CPU."
+            sort_column=3
+            ;;
+    esac
+
+    # Use tput for terminal-friendly colors
+    echo "Processes matching '$process_name':"
+    local process_list
+    process_list=$(ps $ps_opts | grep $grep_opts "$process_name" | grep -v grep | sort -rnk"$sort_column")
+
+    if [[ -z "$process_list" ]]; then
+        echo "No matching processes found."
+        return 0
+    fi
+
+    echo "$process_list" | \
+    awk -v c_user=$(tput setaf 2) \
+        -v c_pid=$(tput setaf 3) \
+        -v c_cpu=$(tput setaf 6) \
+        -v c_mem=$(tput setaf 5) \
+        -v c_start=$(tput setaf 7) \
+        -v c_reset=$(tput sgr0) \
+    'BEGIN {OFS="\t"} {
+        if (NR == 1) {
+            printf "%s%-15s%s %s%-10s%s %s%-8s%s %s%-8s%s %s%-20s%s %s\n",
+            c_user, "USER", c_reset,
+            c_pid, "PID", c_reset,
+            c_cpu, "%CPU", c_reset,
+            c_mem, "%MEM", c_reset,
+            c_start, "START", c_reset,
+            "COMMAND"
+        }
+        command = ""
+        for (i=11; i<=NF; i++) command = command " " $i
+        printf "%s%-15s%s %s%-10s%s %s%-8s%s %s%-8s%s %s%-20s%s %s\n",
+        c_user, $1, c_reset,
+        c_pid, $2, c_reset,
+        c_cpu, $3, c_reset,
+        c_mem, $4, c_reset,
+        c_start, $9, c_reset,
+        command
+    }'
+    echo "----------------------------------------------"
+
+    if [ "$kill_processes" = true ]; then
+        echo "Killing all listed processes..."
+        echo "$process_list" | awk '{print $2}' | xargs -r kill -9
+        echo "All matching processes have been terminated."
+    fi
+}
