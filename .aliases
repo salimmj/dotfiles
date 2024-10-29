@@ -53,9 +53,6 @@ alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 
-# Enable aliases to be sudo’ed
-alias sudo="sudo "
-
 # Get week number
 alias week="date +%V"
 
