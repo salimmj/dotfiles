@@ -50,4 +50,7 @@ fi
 # Yarn global binaries
 add_to_path "$HOME/.yarn/bin"
 
+# Add scripts directory to PATH
+add_to_path "$HOME/.scripts"
+
 export PATH

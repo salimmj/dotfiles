@@ -146,14 +146,32 @@ setup_git_config() {
 # Function to install dotfiles
 install_dotfiles() {
   log "Installing dotfiles..."
-  local shared_dotfiles=(".bashrc" ".bash_profile" ".profile" ".inputrc" ".vimrc" ".gitignore_global" ".gitattributes" ".editorconfig" ".aliases" ".functions" ".exports.shared" ".path.shared")
-  local local_dotfiles=(".path.local" ".exports.local" ".extra")
+  local shared_dotfiles=(
+    ".bashrc"
+    ".bash_profile"
+    ".profile"
+    ".inputrc"
+    ".vimrc"
+    ".gitignore_global"
+    ".gitattributes"
+    ".editorconfig"
+    ".aliases"
+    ".functions"
+    ".exports.shared"
+    ".path.shared"
+    ".scripts"          # Added scripts folder
+  )
+  local local_dotfiles=(
+    ".path.local"
+    ".exports.local"
+    ".extra"
+  )
 
   for file in "${shared_dotfiles[@]}"; do
-    if [ -f "$file" ]; then
+    if [ -e "$file" ]; then
       create_symlink "$(pwd)/$file" "$HOME/$file"
     else
-      warning "File not found: $file"
+      warning "File or directory not found: $file"
     fi
   done
 

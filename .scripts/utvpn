@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+
+# Turn off timeout
+set timeout -1
+
+# Spawn openconnect
+spawn sudo openconnect --protocol=anyconnect vpn.utexas.edu
+
+# Handle sudo password
+expect "password for"
+send -- "[exec echo \$SUDO_PASSWD]\r"
+
+# Handle username
+expect "Please enter your username"
+send -- "mm222953\r"
+
+# Handle password
+expect "Please enter your password"
+send -- "[exec echo \$UT_PASSWORD]\r"
+
+# Handle 2FA
+expect "Enter one of the following"
+send -- "push\r"
+
+# Keep the connection alive
+interact
