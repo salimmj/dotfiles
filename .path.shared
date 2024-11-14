@@ -10,7 +10,7 @@ add_to_path() {
 # Homebrew paths (macOS and Linux)
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS Intel
-    add_to_path "/usr/local/bin"
+    # add_to_path "/usr/local/bin"
     # macOS Apple Silicon
     add_to_path "/opt/homebrew/bin"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then

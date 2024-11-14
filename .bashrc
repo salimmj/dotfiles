@@ -39,3 +39,8 @@ for file in ~/.{path.local,exports.local,extra}; do
 done
 
 unset file
+
+. "$HOME/.local/bin/env"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/salim/.cache/lm-studio/bin"

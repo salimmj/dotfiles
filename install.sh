@@ -235,11 +235,58 @@ install_macos_packages() {
     eval "$(/opt/homebrew/bin/brew shellenv)" # Make sure Homebrew is sourced after installation
   fi
 
-  # Update Homebrew and install essential packages
+  # Update Homebrew
   brew update
-  brew install git neovim tmux curl wget
-}
 
+  # List of formulae to install
+  local formulae=(
+    "git"
+    "neovim"
+    "tmux"
+    "curl"
+    "wget"
+  )
+
+  # List of casks to install
+  local casks=(
+    "spotify"
+    # "brave-browser"
+    "whatsapp"
+    # "raycast"
+    "cursor"
+    "docker"
+    "proton-pass"
+    "protonvpn"
+    "protonmail-bridge"
+  )
+
+  # Install formulae if not already installed
+  for formula in "${formulae[@]}"; do
+    if ! brew list "$formula" &>/dev/null; then
+      log "Installing $formula..."
+      brew install "$formula"
+    else
+      info "$formula is already installed"
+    fi
+  done
+
+  # Function to check if an app is already installed
+  is_app_installed() {
+    local app_name="$1"
+    # Check if the app exists in the /Applications directory or in brew list --cask
+    [[ -d "/Applications/$app_name.app" ]] || brew list --cask "$app_name" &>/dev/null
+  }
+
+  # Install casks if not already installed
+  for cask in "${casks[@]}"; do
+    if ! is_app_installed "$cask"; then
+      log "Installing $cask..."
+      brew install --cask "$cask"
+    else
+      info "$cask is already installed"
+    fi
+  done
+}
 
 # Function to setup neovim
 setup_neovim() {
@@ -300,3 +347,4 @@ main() {
 
 # Run the main function
 main "$@"
+

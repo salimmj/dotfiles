@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 [hostname]
-ssh_only = false
+ssh_only = true
 format = "[$hostname]($style) "
 trim_at = "-"
 style = "bold green"
