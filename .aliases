@@ -2,6 +2,17 @@
 alias nano="$EDITOR"
 alias 'sudo nano'='sudo $EDITOR'
 
+sudo() {
+    if [[ "$1" == "nano" ]]; then
+        shift
+        # Use 'command' to bypass the function recursively
+        command sudo $(which $EDITOR) "$@"
+    else
+        command sudo "$@"
+    fi
+}
+
+alias nano="$EDITOR"
 
 # Vim
 alias vim="nvim"
