@@ -43,4 +43,33 @@ unset file
 . "$HOME/.local/bin/env"
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/salim/.cache/lm-studio/bin"
+export PATH="$PATH:$HOME/.cache/lm-studio/bin"
+
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+eval "$(/opt/homebrew/bin/brew shellenv bash)"
+export PATH=${PATH}:/opt/homebrew/opt/python/libexec/bin
+
+# -------------------------------------------------------
+# for AFNI: auto-inserted by init_user_dotfiles.py
+
+# add AFNI abin to PATH
+export PATH=${PATH}:$HOME/abin
+
+# set up tab completion for AFNI programs
+if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
+then
+   source $HOME/.afni/help/all_progs.COMP.bash
+fi
+# -------------------------------------------------------
+
+
+eval "$(/opt/homebrew/bin/brew shellenv bash)"
+export PATH=${PATH}:/opt/homebrew/opt/python/libexec/bin
+export R_LIBS=$HOME/sw/R-4.3.1
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

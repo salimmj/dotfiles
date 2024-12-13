@@ -245,6 +245,8 @@ install_macos_packages() {
     "tmux"
     "curl"
     "wget"
+    "pandoc"
+    "node"
   )
 
   # List of casks to install
@@ -258,6 +260,14 @@ install_macos_packages() {
     "proton-pass"
     "protonvpn"
     "protonmail-bridge"
+    "tailscale"
+    "chatgpt"
+    "sublime-text"
+    "vlc"
+    "imagej"
+    "notion"
+    "zotero"
+    "mactex"
   )
 
   # Install formulae if not already installed
