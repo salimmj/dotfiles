@@ -268,6 +268,7 @@ install_macos_packages() {
     "notion"
     "zotero"
     "mactex"
+    "logitech-options"
   )
 
   # Install formulae if not already installed
