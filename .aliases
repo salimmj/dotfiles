@@ -1,6 +1,5 @@
 # nano sucks
 alias nano="$EDITOR"
-alias 'sudo nano'='sudo $EDITOR'
 
 sudo() {
     if [[ "$1" == "nano" ]]; then

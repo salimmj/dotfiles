@@ -247,6 +247,7 @@ install_macos_packages() {
     "wget"
     "pandoc"
     "node"
+    "zsh-history-substring-search"
   )
 
   # List of casks to install

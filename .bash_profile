@@ -8,3 +8,8 @@
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/salim/.cache/lm-studio/bin"
+
+export PATH=$PATH:/Users/salim/.spicetify
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
